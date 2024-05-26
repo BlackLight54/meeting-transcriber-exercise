@@ -1,5 +1,7 @@
 .idea/
 output.json
+test_chunk.wav
+temp_chunk.wav
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
