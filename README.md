@@ -11,16 +11,20 @@ Web application that allows a moderator to record the speeches of people present
 
 ## Authors
 
-- Hegedűs András: \[nomad-at-you\] Transcription and web application
-- Farkas Martin: \[BlackLight54\] Transcription enhancement and prompting research
+- Hegedűs András (BCFU8E)): \[nomad-at-you\] Transcription and web application
+- Farkas Martin (GV2RF8): \[BlackLight54\] Transcription enhancement and prompting research
 
 ## Description of Solution
 
 Our solution is available on GitHub: https://github.com/BlackLight54/meeting-transcriber-exercise
 
+
 ### UI
 
-![img.png](img.png)
+
+<img src="img.png" alt="ui" width="400"/>
+
+<div style="page-break-after: always;"></div>
 
 ### Architecture
 
@@ -53,6 +57,7 @@ Faster-Whisper is a highly efficient implementation of OpenAI's Whisper model, o
 - **Beam Size:** We configured the model with a beam size of 7, enhancing the quality of the transcription by considering multiple hypotheses during decoding.
 
 The Faster-Whisper model transcribes audio files by splitting them into segments, each containing the spoken words. These segments are then combined to form a coherent transcript. 
+<div style="page-break-after: always;"></div>
 
 #### OpenAI
 
@@ -65,6 +70,8 @@ OpenAI's language models, specifically those in the GPT-4 series, are employed f
 
 *Warning:* The OpenAI API is a paid service, and users must have an API key to access the model. Add it as an environment variable to run the application.
 
+
+
 ### Prompting Techniques
 
 - **Prompting Notebook:** `./prompting.ipynb`
@@ -73,14 +80,7 @@ OpenAI's language models, specifically those in the GPT-4 series, are employed f
   - System and user prompts
   - Separation of actions (Prompt-chaining, Chain-of-thought prompting)
 
-## Learnings
-
-Through this project, we gained practical experience in integrating speech-to-text solutions with diarization capabilities and leveraging language models for text correction, formatting, and summarization. Additionally, we applied advanced prompting techniques to enhance the accuracy and coherence of the generated meeting minutes.
-
-## Solution
-
-Our solution is implemented as a Flask web application that allows users to upload audio files, transcribe them, and enhance the notes by summarizing topics discussed, decisions made, and action items assigned during the meeting. The application is designed to support multiple languages, with a focus on Hungarian.
-
+   
 ### Key Components
 
 1. **Flask Application:**
@@ -95,6 +95,8 @@ Our solution is implemented as a Flask web application that allows users to uplo
 
 4. **File Handling:**
    - Transcriptions are stored in a text file (`notes.txt`), which is updated with each new upload.
+
+<div style="page-break-after: always;"></div>
 
 ### Example Workflow
 
@@ -112,7 +114,12 @@ Our solution is implemented as a Flask web application that allows users to uplo
 
 By following this structured approach, we ensure that the meeting minutes are comprehensive, accurately reflecting the discussions and outcomes of the meeting.
 
-### Future Enhancements Opportunities
+## Learnings
+
+Through this project, we gained practical experience in integrating speech-to-text solutions with diarization capabilities and leveraging language models for text correction, formatting, and summarization. Additionally, we applied advanced prompting techniques to enhance the accuracy and coherence of the generated meeting minutes.
+
+
+## Future Enhancements Opportunities
 
 - Subscribable moderation list for group members to receive notifications when their turn is up
 - More enhancement features for the meeting notes, such as sentiment analysis and keyword extraction
