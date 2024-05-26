@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Meeting Notes</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+            font-family: Arial, sans-serif;
+        }
+        #container {
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+        }
+        #textBox, #enhancedTextBox {
+            width: 100%;
+            height: 200px;
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+        }
+        #recordButton, #stopButton, #uploadButton, #enhanceButton {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #recordButton {
+            background-color: #28a745;
+            color: white;
+        }
+        #stopButton {
+            background-color: #dc3545;
+            color: white;
+            display: none;
+        }
+        #uploadButton {
+            background-color: #007BFF;
+            color: white;
+        }
+        #enhanceButton {
+            background-color: #ffc107;
+            color: white;
+        }
+        #name {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Meeting Notes</h1>
+        <input type="text" id="name" placeholder="Your Name" required>
+        <textarea id="textBox" placeholder="Transcribed text will appear here..."></textarea>
+        <textarea id="enhancedTextBox" placeholder="Enhanced notes will appear here..."></textarea>
+        <br>
+        <button id="recordButton">Record</button>
+        <button id="stopButton">Stop</button>
+        <button id="uploadButton">Upload</button>
+        <button id="enhanceButton">Enhance Notes</button>
+    </div>
+
+    <script>
+        let recordButton = document.getElementById('recordButton');
+        let stopButton = document.getElementById('stopButton');
+        let uploadButton = document.getElementById('uploadButton');
+        let enhanceButton = document.getElementById('enhanceButton');
+        let textBox = document.getElementById('textBox');
+        let enhancedTextBox = document.getElementById('enhancedTextBox');
+        let nameInput = document.getElementById('name');
+        let mediaRecorder;
+        let audioChunks = [];
+
+        // Load the saved name from localStorage
+        window.onload = () => {
+            let savedName = localStorage.getItem('name');
+            if (savedName) {
+                nameInput.value = savedName;
+            }
+        };
+
+        // Save the name to localStorage whenever it changes
+        nameInput.addEventListener('input', () => {
+            localStorage.setItem('name', nameInput.value);
+        });
+
+        recordButton.addEventListener('click', async () => {
+            let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start();
+            recordButton.style.display = 'none';
+            stopButton.style.display = 'inline-block';
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = async () => {
+                let audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                let formData = new FormData();
+                formData.append('audio_data', audioBlob, 'recorded_audio.wav');
+                formData.append('name', nameInput.value);
+
+                let response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                let result = await response.json();
+                textBox.textContent = result.transcribed_text;
+                recordButton.style.display = 'inline-block';
+                stopButton.style.display = 'none';
+            };
+        });
+
+        stopButton.addEventListener('click', () => {
+            mediaRecorder.stop();
+        });
+
+        uploadButton.addEventListener('click', async () => {
+            let fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'audio/*';
+            fileInput.onchange = async () => {
+                let file = fileInput.files[0];
+                let formData = new FormData();
+                formData.append('audio_data', file);
+                formData.append('name', nameInput.value);
+
+                let response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                let result = await response.json();
+                textBox.textContent = result.transcribed_text;
+            };
+            fileInput.click();
+        });
+
+        enhanceButton.addEventListener('click', async () => {
+            let response = await fetch('/enhance_notes', {
+                method: 'GET'
+            });
+            let result = await response.json();
+            enhancedTextBox.textContent = result.enhanced_notes;
+        });
+    </script>
+</body>
+</html>
