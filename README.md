@@ -49,14 +49,23 @@ Used models:
 - https://huggingface.co/pyannote/speaker-diarization-3.1
 - https://huggingface.co/pyannote/segmentation-3.0
 
-Evaluation: `text-to-speech-insanely-fast-whisper.ipynb`
+Evaluation: `./text-to-speech-insanely-fast-whisper.ipynb`
 
 We tried English and Hungarian audio samples, and samples with multiple speakers. We found that with low quality audio,
-or with speakers with similar voices, it is hard to differentiate between speakers, and the model sometimes fails to identify speakers correctly.
+or with speakers with similar voices, it is hard to differentiate between speakers, and the model sometimes fails to identify speakers correctly. Still, it was above our expectations.
 
 ### Language models
 
 We used OpenAI's language model for text correction and formatting, and for generating the minutes, as we already had access to them through the OpenAI API.
 
+### Prompting techniques
+
+prompting: `./prompting.ipynb`
+
+We used a few prompting techniques that we learned during the course, including:
+
+- One- and Few-shot prompting
+- System and user prompts
+- Separation of actions ~ ReActive Prompting
 
 ## Learnings
