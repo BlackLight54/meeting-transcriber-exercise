@@ -54,4 +54,9 @@ Evaluation: `text-to-speech-insanely-fast-whisper.ipynb`
 We tried English and Hungarian audio samples, and samples with multiple speakers. We found that with low quality audio,
 or with speakers with similar voices, it is hard to differentiate between speakers, and the model sometimes fails to identify speakers correctly.
 
+### Language models
+
+We used OpenAI's language model for text correction and formatting, and for generating the minutes, as we already had access to them through the OpenAI API.
+
+
 ## Learnings
